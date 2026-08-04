@@ -27,7 +27,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .select('*')
       .eq('id', uid)
       .maybeSingle();
-    if (!error && data) setProfile(data as Profile);
+
+    if (!error && data) {
+      setProfile(data as Profile);
+      return;
+    }
+
+    // Filet de securite : le trigger cote base a peut-etre echoue.
+    // On est ici forcement dans une session authentifiee (fetchProfile
+    // n'est appele qu'apres un signIn/signUp/onAuthStateChange reussi),
+    // donc auth.uid() = uid et la policy "profiles_insert_own" autorise
+    // cette creation cote client.
+    const { data: userData } = await supabase.auth.getUser();
+    const meta = (userData.user?.user_metadata ?? {}) as { full_name?: string; role?: 'client' | 'designer' };
+    const { data: created, error: createErr } = await supabase
+      .from('profiles')
+      .insert({
+        id: uid,
+        full_name: meta.full_name ?? '',
+        role: meta.role ?? 'client',
+      })
+      .select()
+      .maybeSingle();
+
+    if (!createErr && created) setProfile(created as Profile);
     else setProfile(null);
   };
 
