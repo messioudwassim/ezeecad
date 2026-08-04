@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Menu } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 import Sidebar from '@/components/Sidebar';
 import { useAuth } from '@/context/AuthContext';
 
@@ -9,6 +10,7 @@ export default function DashboardLayout() {
   const { t } = useTranslation();
   const { profile } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
 
   return (
     <div className="min-h-screen bg-mesh pt-16">
@@ -30,7 +32,22 @@ export default function DashboardLayout() {
               </h1>
             </div>
 
-            <Outlet />
+            {/* Cube-face transition: each dashboard page swaps in like the
+                face of a cube rotating into view, echoing the 3D-model theme. */}
+            <div style={{ perspective: 1600 }}>
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={location.pathname}
+                  initial={{ rotateY: -35, opacity: 0, x: 60 }}
+                  animate={{ rotateY: 0, opacity: 1, x: 0 }}
+                  exit={{ rotateY: 35, opacity: 0, x: -60 }}
+                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                  style={{ transformStyle: 'preserve-3d', transformOrigin: 'left center' }}
+                >
+                  <Outlet />
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
         </main>
       </div>

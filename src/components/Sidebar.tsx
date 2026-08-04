@@ -54,7 +54,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
             key={link.to}
             to={link.to}
             onClick={onClose}
-            className={`relative flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all group ${
+            className={`emerge-cube relative flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all group ${
               isActive
                 ? 'bg-gradient-to-r from-primary-500/10 to-accent-500/10 text-primary-600 dark:text-primary-400'
                 : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
