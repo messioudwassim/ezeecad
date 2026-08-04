@@ -17,7 +17,7 @@ Remplace-les plus tard par les vrais modèles de tes designers.
 
 do $$
 declare
-  v_designer_id uuid := 'PASTE_DESIGNER_ID_HERE'; -- <-- à remplacer
+  v_designer_id uuid := '3ec2261c-c579-4a70-bab4-b0ee1081557a'; -- <-- à remplacer
   v_mechanical uuid;      -- categories.id est uuid dans ce projet
   v_furniture uuid;
   v_robotics uuid;
