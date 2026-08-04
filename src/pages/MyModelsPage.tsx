@@ -87,7 +87,7 @@ export default function MyModelsPage() {
                 <div className="p-4">
                   <h3 className="font-semibold truncate">{model.title}</h3>
                   <div className="flex items-center justify-between mt-2 text-sm text-slate-500">
-                    <span>{model.price === 0 ? t('marketplace.free') : `$${model.price}`}</span>
+                    <span>{model.price === 0 ? t('marketplace.free') : `${model.price.toLocaleString('fr-DZ')} DA`}</span>
                     <span>{model.downloads_count} {t('product.downloads').toLowerCase()}</span>
                   </div>
                 </div>

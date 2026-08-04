@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { Download, ArrowLeft, CheckCircle, AlertCircle, Box } from 'lucide-react';
+import { Download, ArrowLeft, CheckCircle, AlertCircle, Box, CreditCard } from 'lucide-react';
 import { supabase, type Model } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 
@@ -17,6 +17,8 @@ export default function ProductDetailPage() {
   const [activeImage, setActiveImage] = useState(0);
   const [downloading, setDownloading] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
+  const [alreadyPaid, setAlreadyPaid] = useState(false);
+  const [checkingAccess, setCheckingAccess] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -38,7 +40,28 @@ export default function ProductDetailPage() {
     fetchModel();
   }, [id]);
 
-  const handleDownload = async () => {
+  // Pour un modèle payant, on vérifie si l'utilisateur y a déjà accès
+  // (déjà payé -> une ligne existe dans `downloads`, insérée uniquement
+  // par le webhook Chargily après paiement confirmé).
+  useEffect(() => {
+    async function checkAccess() {
+      if (!user || !model || model.price <= 0) {
+        setCheckingAccess(false);
+        return;
+      }
+      const { data } = await supabase
+        .from('downloads')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('model_id', model.id)
+        .maybeSingle();
+      setAlreadyPaid(!!data);
+      setCheckingAccess(false);
+    }
+    checkAccess();
+  }, [user, model]);
+
+  const handleFreeDownload = async () => {
     if (!user) {
       navigate('/login');
       return;
@@ -48,10 +71,10 @@ export default function ProductDetailPage() {
     setError(null);
 
     try {
-      const { error: dlError } = await supabase.from('downloads').upsert({
-        user_id: user.id,
-        model_id: model.id,
-      });
+      const { error: dlError } = await supabase.from('downloads').upsert(
+        { user_id: user.id, model_id: model.id },
+        { onConflict: 'user_id,model_id' },
+      );
       if (dlError) throw dlError;
 
       await supabase.rpc('increment_download_count', { model_uuid: model.id });
@@ -67,6 +90,51 @@ export default function ProductDetailPage() {
     }
   };
 
+  const handlePaidDownload = () => {
+    if (!model?.file_url) return;
+    window.open(model.file_url, '_blank');
+    setDownloaded(true);
+  };
+
+  const handlePayNow = async () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+    if (!model) return;
+    setDownloading(true);
+    setError(null);
+
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const accessToken = sessionData.session?.access_token;
+
+      const res = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chargily-create-checkout`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+          },
+          body: JSON.stringify({ modelId: model.id }),
+        },
+      );
+
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({}));
+        throw new Error(errBody.error || 'Failed to start payment');
+      }
+
+      const { checkoutUrl } = await res.json();
+      window.location.href = checkoutUrl;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Payment failed. Please try again.');
+      setDownloading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-mesh pt-16 flex items-center justify-center">
@@ -77,7 +145,7 @@ export default function ProductDetailPage() {
     );
   }
 
-  if (error || !model) {
+  if (error && !model) {
     return (
       <div className="min-h-screen bg-mesh pt-16 flex items-center justify-center">
         <div className="text-center">
@@ -91,9 +159,12 @@ export default function ProductDetailPage() {
       </div>
     );
   }
+  if (!model) return null;
 
   const description = model[`description_${lang}`] || model.description_en || model.description_fr;
   const images = model.images?.length ? model.images : ['https://images.pexels.com/photos/3825572/pexels-photo-3825572.jpeg?auto=compress&cs=tinysrgb&w=800'];
+  const isPaid = model.price > 0;
+  const hasAccess = !isPaid || alreadyPaid;
 
   return (
     <div className="min-h-screen bg-mesh pt-16">
@@ -117,10 +188,10 @@ export default function ProductDetailPage() {
                 className="w-full h-full object-cover"
               />
               <div className="absolute top-4 left-4">
-                {model.price === 0 ? (
+                {!isPaid ? (
                   <span className="badge-3d bg-success-500/90 text-white">{t('marketplace.free')}</span>
                 ) : (
-                  <span className="badge-3d bg-primary-500/90 text-white">${model.price}</span>
+                  <span className="badge-3d bg-primary-500/90 text-white">{model.price.toLocaleString('fr-DZ')} DA</span>
                 )}
               </div>
             </div>
@@ -184,15 +255,16 @@ export default function ProductDetailPage() {
 
             <div className="card-3d p-5 space-y-3">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-500">{t('product.details')}</span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
                 <span className="text-slate-500">{t('product.downloads')}</span>
                 <span className="font-medium">{model.downloads_count}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-slate-500">{t('product.category')}</span>
                 <span className="font-medium">{model.category?.[`name_${lang}`] || model.category?.name_en || '-'}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-slate-500">{t('product.details')}</span>
+                <span className="font-medium">{!isPaid ? t('marketplace.free') : `${model.price.toLocaleString('fr-DZ')} DA`}</span>
               </div>
             </div>
 
@@ -203,25 +275,60 @@ export default function ProductDetailPage() {
               </div>
             )}
 
-            <button
-              onClick={handleDownload}
-              disabled={downloading || downloaded}
-              className="btn-3d w-full justify-center text-base py-4"
-            >
-              {downloaded ? (
-                <>
-                  <CheckCircle className="w-5 h-5" />
-                  {t('marketplace.download')}
-                </>
-              ) : downloading ? (
-                '...'
-              ) : (
-                <>
-                  <Download className="w-5 h-5" />
-                  {model.price === 0 ? t('marketplace.download') : t('product.buyNow')}
-                </>
-              )}
-            </button>
+            {checkingAccess ? (
+              <button disabled className="btn-3d w-full justify-center text-base py-4 opacity-60">
+                ...
+              </button>
+            ) : !isPaid ? (
+              <button
+                onClick={handleFreeDownload}
+                disabled={downloading || downloaded}
+                className="btn-3d w-full justify-center text-base py-4"
+              >
+                {downloaded ? (
+                  <>
+                    <CheckCircle className="w-5 h-5" />
+                    {t('marketplace.download')}
+                  </>
+                ) : downloading ? (
+                  '...'
+                ) : (
+                  <>
+                    <Download className="w-5 h-5" />
+                    {t('marketplace.download')}
+                  </>
+                )}
+              </button>
+            ) : hasAccess ? (
+              <button
+                onClick={handlePaidDownload}
+                className="btn-3d w-full justify-center text-base py-4"
+              >
+                <Download className="w-5 h-5" />
+                {t('marketplace.download')}
+              </button>
+            ) : (
+              <button
+                onClick={handlePayNow}
+                disabled={downloading}
+                className="btn-3d w-full justify-center text-base py-4"
+              >
+                {downloading ? (
+                  '...'
+                ) : (
+                  <>
+                    <CreditCard className="w-5 h-5" />
+                    {t('product.buyNow')} — {model.price.toLocaleString('fr-DZ')} DA
+                  </>
+                )}
+              </button>
+            )}
+
+            {isPaid && !checkingAccess && !hasAccess && (
+              <p className="text-center text-xs text-slate-400">
+                Paiement sécurisé par carte CIB ou EDAHABIA (Chargily Pay)
+              </p>
+            )}
 
             {!user && (
               <p className="text-center text-sm text-slate-500">

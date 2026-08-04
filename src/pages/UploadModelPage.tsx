@@ -56,43 +56,19 @@ export default function UploadModelPage() {
         }
       }
 
+      // TEMPORAIRE : upload vers Supabase Storage (bucket model-files, 1GB gratuit).
+      // À remplacer par l'appel à l'edge function s3-upload-url une fois
+      // Backblaze B2 configuré et la fonction déployée (voir supabase/functions/s3-upload-url).
       let fileUrl: string | null = null;
       if (file) {
-        const { data: sessionData } = await supabase.auth.getSession();
-        const accessToken = sessionData.session?.access_token;
-
-        const res = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/s3-upload-url`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${accessToken}`,
-              apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
-            },
-            body: JSON.stringify({
-              fileName: file.name,
-              contentType: file.type || 'application/octet-stream',
-            }),
-          },
-        );
-
-        if (!res.ok) {
-          const errBody = await res.json().catch(() => ({}));
-          throw new Error(errBody.error || 'Failed to get upload URL');
-        }
-
-        const { uploadUrl, publicUrl } = await res.json();
-
-        const putRes = await fetch(uploadUrl, {
-          method: 'PUT',
-          headers: { 'Content-Type': file.type || 'application/octet-stream' },
-          body: file,
-        });
-
-        if (!putRes.ok) throw new Error('Failed to upload file to storage');
-
-        fileUrl = publicUrl;
+        const ext = file.name.split('.').pop();
+        const path = `models/${user.id}/${Date.now()}.${ext}`;
+        const { error: upErr } = await supabase.storage
+          .from('model-files')
+          .upload(path, file);
+        if (upErr) throw new Error(upErr.message);
+        const { data: urlData } = supabase.storage.from('model-files').getPublicUrl(path);
+        fileUrl = urlData.publicUrl;
       }
 
       const { error: insertErr } = await supabase.from('models').insert({

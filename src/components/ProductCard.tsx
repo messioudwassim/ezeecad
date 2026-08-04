@@ -38,7 +38,7 @@ export default function ProductCard({ model, index = 0 }: ProductCardProps) {
             {model.price === 0 ? (
               <span className="badge-3d bg-success-500/90 text-white">{t('marketplace.free')}</span>
             ) : (
-              <span className="badge-3d bg-primary-500/90 text-white">${model.price}</span>
+              <span className="badge-3d bg-primary-500/90 text-white">{model.price.toLocaleString('fr-DZ')} DA</span>
             )}
           </div>
 
