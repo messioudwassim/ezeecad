@@ -1,7 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { Menu, X, Moon, Sun, Globe, LayoutDashboard, LogOut } from 'lucide-react';
 import { useTheme } from '@/context/ThemeContext';
 import { useLang } from '@/context/LangContext';

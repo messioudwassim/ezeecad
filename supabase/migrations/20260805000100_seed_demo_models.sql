@@ -18,10 +18,10 @@ Remplace-les plus tard par les vrais modèles de tes designers.
 do $$
 declare
   v_designer_id uuid := 'PASTE_DESIGNER_ID_HERE'; -- <-- à remplacer
-  v_mechanical integer;   -- categories.id est integer dans ce projet, pas uuid
-  v_furniture integer;
-  v_robotics integer;
-  v_architecture integer;
+  v_mechanical uuid;      -- categories.id est uuid dans ce projet
+  v_furniture uuid;
+  v_robotics uuid;
+  v_architecture uuid;
 begin
   select id into v_mechanical   from categories where slug = 'mechanical';
   select id into v_furniture    from categories where slug = 'furniture';

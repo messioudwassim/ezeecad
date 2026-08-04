@@ -8,7 +8,7 @@ type AuthContextType = {
   profile: Profile | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
-  signUp: (email: string, password: string, fullName: string, role: 'client' | 'designer') => Promise<{ error: string | null }>;
+  signUp: (email: string, password: string, fullName: string, role: 'client' | 'designer') => Promise<{ error: string | null; needsEmailConfirmation: boolean }>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 };
@@ -72,20 +72,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     fullName: string,
     role: 'client' | 'designer'
   ) => {
-    const { data, error } = await supabase.auth.signUp({ email, password });
-    if (error) return { error: error.message };
-    if (data.user) {
-      const { error: profileError } = await supabase.from('profiles').insert({
-        id: data.user.id,
-        full_name: fullName,
-        role,
-      });
-      if (profileError) return { error: profileError.message };
-      // The auth state listener may have already fetched (and found no) profile
-      // due to a race with the insert above — force a refetch now that it exists.
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name: fullName, role },
+      },
+    });
+    if (error) return { error: error.message, needsEmailConfirmation: false };
+
+    // Si la confirmation email est desactivee sur le projet, une session
+    // est deja active ici : le trigger cote base a deja cree le profil,
+    // on le recupere juste pour peupler le contexte tout de suite.
+    if (data.session && data.user) {
       await fetchProfile(data.user.id);
+      return { error: null, needsEmailConfirmation: false };
     }
-    return { error: null };
+    return { error: null, needsEmailConfirmation: true };
   };
 
   const signOut = async () => {

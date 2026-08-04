@@ -17,19 +17,46 @@ export default function RegisterPage() {
   const [role, setRole] = useState<'client' | 'designer'>('client');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [needsConfirmation, setNeedsConfirmation] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
-    const { error } = await signUp(email, password, fullName, role);
+    const { error, needsEmailConfirmation } = await signUp(email, password, fullName, role);
     setLoading(false);
     if (error) {
       setError(error);
+    } else if (needsEmailConfirmation) {
+      setNeedsConfirmation(true);
     } else {
       navigate('/dashboard');
     }
   };
+
+  if (needsConfirmation) {
+    return (
+      <div className="min-h-screen bg-mesh pt-16 flex items-center justify-center px-4">
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="card-3d p-10 text-center max-w-md"
+        >
+          <Mail className="w-14 h-14 mx-auto text-primary-500 mb-4" />
+          <h2 className="font-display text-xl font-bold mb-2">
+            {t('auth.checkEmailTitle') || 'Vérifiez votre boîte mail'}
+          </h2>
+          <p className="text-slate-600 dark:text-slate-400">
+            {t('auth.checkEmailBody') ||
+              `Un lien de confirmation a été envoyé à ${email}. Cliquez dessus pour activer votre compte, puis connectez-vous.`}
+          </p>
+          <Link to="/login" className="btn-3d mt-6 inline-flex">
+            {t('auth.goToLogin') || 'Aller à la connexion'}
+          </Link>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-mesh pt-16 flex items-center justify-center px-4 py-8">

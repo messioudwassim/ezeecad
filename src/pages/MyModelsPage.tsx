@@ -7,8 +7,7 @@ import { supabase, type Model } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 
 export default function MyModelsPage() {
-  const { t, i18n } = useTranslation();
-  const lang = i18n.language as 'fr' | 'en' | 'ar';
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [models, setModels] = useState<Model[]>([]);
   const [loading, setLoading] = useState(true);
