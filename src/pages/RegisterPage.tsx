@@ -100,13 +100,13 @@ export default function RegisterPage() {
             <div>
               <label className="block text-sm font-medium mb-1.5">{t('auth.fullName')}</label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <User className="absolute start-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input
                   type="text"
                   required
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="input-3d pl-10"
+                  className="input-3d ps-10"
                   placeholder="John Doe"
                 />
               </div>
@@ -114,13 +114,13 @@ export default function RegisterPage() {
             <div>
               <label className="block text-sm font-medium mb-1.5">{t('auth.email')}</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <Mail className="absolute start-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="input-3d pl-10"
+                  className="input-3d ps-10"
                   placeholder="you@example.com"
                 />
               </div>
@@ -128,14 +128,14 @@ export default function RegisterPage() {
             <div>
               <label className="block text-sm font-medium mb-1.5">{t('auth.password')}</label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <Lock className="absolute start-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input
                   type="password"
                   required
                   minLength={6}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="input-3d pl-10"
+                  className="input-3d ps-10"
                   placeholder="••••••••"
                 />
               </div>

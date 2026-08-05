@@ -15,6 +15,9 @@ import MyDownloadsPage from '@/pages/MyDownloadsPage';
 import AdminPage from '@/pages/AdminPage';
 import ProfilePage from '@/pages/ProfilePage';
 import PaymentReturnPage from '@/pages/PaymentReturnPage';
+import TermsPage from '@/pages/TermsPage';
+import PrivacyPage from '@/pages/PrivacyPage';
+import ContactPage from '@/pages/ContactPage';
 import type { ReactNode } from 'react';
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
@@ -63,6 +66,9 @@ function App() {
         <Route path="/login" element={<PublicLayout><LoginPage /></PublicLayout>} />
         <Route path="/register" element={<PublicLayout><RegisterPage /></PublicLayout>} />
         <Route path="/payment/return" element={<PublicLayout><PaymentReturnPage /></PublicLayout>} />
+        <Route path="/cgv" element={<PublicLayout><TermsPage /></PublicLayout>} />
+        <Route path="/confidentialite" element={<PublicLayout><PrivacyPage /></PublicLayout>} />
+        <Route path="/contact" element={<PublicLayout><ContactPage /></PublicLayout>} />
 
         <Route
           path="/dashboard"

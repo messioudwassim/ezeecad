@@ -22,15 +22,15 @@ export default function Footer() {
             <h4 className="font-semibold text-sm mb-3">{t('footer.about')}</h4>
             <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
               <li><Link to="/marketplace" className="hover:text-primary-500 transition-colors">{t('nav.marketplace')}</Link></li>
-              <li><a href="#" className="hover:text-primary-500 transition-colors">{t('footer.contact')}</a></li>
+              <li><Link to="/contact" className="hover:text-primary-500 transition-colors">{t('footer.contact')}</Link></li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-semibold text-sm mb-3">{t('footer.terms')}</h4>
             <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
-              <li><a href="#" className="hover:text-primary-500 transition-colors">{t('footer.terms')}</a></li>
-              <li><a href="#" className="hover:text-primary-500 transition-colors">{t('footer.privacy')}</a></li>
+              <li><Link to="/cgv" className="hover:text-primary-500 transition-colors">{t('footer.terms')}</Link></li>
+              <li><Link to="/confidentialite" className="hover:text-primary-500 transition-colors">{t('footer.privacy')}</Link></li>
             </ul>
           </div>
         </div>

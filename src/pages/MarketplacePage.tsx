@@ -99,13 +99,13 @@ export default function MarketplacePage() {
         {/* Search + Sort Bar */}
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+            <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={t('marketplace.search')}
-              className="input-3d pl-10"
+              className="input-3d ps-10"
             />
           </div>
           <select
