@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Mail, Lock, User, ArrowRight, AlertCircle, Briefcase, ShoppingBag } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
-import Cube3D from '@/components/Cube3D';
+import ExplodedAssembly from '@/components/ExplodedAssembly';
 import Logo from '@/components/Logo';
 
 export default function RegisterPage() {
@@ -68,7 +68,7 @@ export default function RegisterPage() {
         >
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-br from-accent-500/20 to-primary-500/20 blur-3xl rounded-full" />
-            <Cube3D size={220} className="relative z-10" />
+            <ExplodedAssembly size={220} className="relative z-10" />
           </div>
           <div className="mt-8">
             <Logo size={48} showText={false} className="justify-center" />

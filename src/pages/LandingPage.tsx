@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Sparkles, Shield, Zap, Globe2, ArrowRight, Box, Cpu, Heart, Building2, Car, Sofa, Settings } from 'lucide-react';
-import Cube3D from '@/components/Cube3D';
+import ExplodedAssembly from '@/components/ExplodedAssembly';
 import FloatingShape from '@/components/FloatingShape';
 
 export default function LandingPage() {
@@ -72,7 +72,7 @@ export default function LandingPage() {
           >
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-br from-primary-500/20 to-accent-500/20 blur-3xl rounded-full animate-pulse-slow" />
-              <Cube3D size={280} className="relative z-10" />
+              <ExplodedAssembly size={280} className="relative z-10" />
             </div>
           </motion.div>
         </div>
