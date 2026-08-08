@@ -3,6 +3,7 @@ import { Suspense, lazy, type ReactNode } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import ScrollToTop from '@/components/ScrollToTop';
 
 // Chargement paresseux : chaque page n'est telechargee que quand elle est
 // visitee, au lieu d'un seul bundle contenant tout le site des le premier
@@ -68,6 +69,7 @@ function PublicLayout({ children }: { children: ReactNode }) {
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/" element={<PublicLayout><LandingPage /></PublicLayout>} />

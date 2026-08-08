@@ -52,6 +52,10 @@ const resources = {
         priceHigh: 'Prix décroissant',
         noResults: 'Aucun modèle trouvé',
         results: '{{count}} modèles',
+        freeOnly: 'Gratuit uniquement',
+        minPrice: 'Prix min (DA)',
+        maxPrice: 'Prix max (DA)',
+        clearFilters: 'Réinitialiser',
       },
       product: {
         description: 'Description',
@@ -221,6 +225,10 @@ const resources = {
         priceHigh: 'Price: High to Low',
         noResults: 'No models found',
         results: '{{count}} models',
+        freeOnly: 'Free only',
+        minPrice: 'Min price (DA)',
+        maxPrice: 'Max price (DA)',
+        clearFilters: 'Reset',
       },
       product: {
         description: 'Description',
@@ -390,6 +398,10 @@ const resources = {
         priceHigh: 'السعر: من الأعلى إلى الأقل',
         noResults: 'لا توجد نماذج',
         results: '{{count}} نموذج',
+        freeOnly: 'مجاني فقط',
+        minPrice: 'أدنى سعر (دج)',
+        maxPrice: 'أعلى سعر (دج)',
+        clearFilters: 'إعادة تعيين',
       },
       product: {
         description: 'الوصف',

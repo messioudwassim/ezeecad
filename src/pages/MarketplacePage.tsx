@@ -17,6 +17,9 @@ export default function MarketplacePage() {
   const [selectedCategory, setSelectedCategory] = useState<string>(searchParams.get('category') || 'all');
   const [sortBy, setSortBy] = useState<'newest' | 'popular' | 'priceLow' | 'priceHigh'>('newest');
   const [showFilters, setShowFilters] = useState(false);
+  const [freeOnly, setFreeOnly] = useState(false);
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
 
   useEffect(() => {
     async function fetchData() {
@@ -56,6 +59,12 @@ export default function MarketplacePage() {
       const cat = categories.find((c) => c.slug === selectedCategory);
       if (cat) result = result.filter((m) => m.category_id === cat.id);
     }
+    if (freeOnly) {
+      result = result.filter((m) => Number(m.price) === 0);
+    } else {
+      if (minPrice !== '') result = result.filter((m) => Number(m.price) >= Number(minPrice));
+      if (maxPrice !== '') result = result.filter((m) => Number(m.price) <= Number(maxPrice));
+    }
     switch (sortBy) {
       case 'newest':
         result.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
@@ -71,7 +80,7 @@ export default function MarketplacePage() {
         break;
     }
     return result;
-  }, [models, search, selectedCategory, sortBy, categories]);
+  }, [models, search, selectedCategory, sortBy, categories, freeOnly, minPrice, maxPrice]);
 
   const handleCategoryChange = (slug: string) => {
     setSelectedCategory(slug);
@@ -120,12 +129,71 @@ export default function MarketplacePage() {
           </select>
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="btn-ghost-3d sm:w-auto"
+            aria-expanded={showFilters}
+            className={`btn-ghost-3d sm:w-auto ${showFilters ? 'ring-2 ring-primary-500' : ''}`}
           >
             <SlidersHorizontal className="w-4 h-4" />
             {t('marketplace.filters')}
           </button>
         </div>
+
+        {showFilters && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="card-3d p-4 mb-6 flex flex-wrap items-end gap-4"
+          >
+            <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={freeOnly}
+                onChange={(e) => setFreeOnly(e.target.checked)}
+                className="w-4 h-4 rounded accent-primary-500"
+              />
+              {t('marketplace.freeOnly')}
+            </label>
+
+            <div className={freeOnly ? 'opacity-40 pointer-events-none' : ''}>
+              <label className="block text-xs text-slate-500 mb-1">{t('marketplace.minPrice')}</label>
+              <input
+                type="number"
+                min={0}
+                value={minPrice}
+                disabled={freeOnly}
+                onChange={(e) => setMinPrice(e.target.value)}
+                className="input-3d w-32 py-2"
+                placeholder="0"
+              />
+            </div>
+
+            <div className={freeOnly ? 'opacity-40 pointer-events-none' : ''}>
+              <label className="block text-xs text-slate-500 mb-1">{t('marketplace.maxPrice')}</label>
+              <input
+                type="number"
+                min={0}
+                value={maxPrice}
+                disabled={freeOnly}
+                onChange={(e) => setMaxPrice(e.target.value)}
+                className="input-3d w-32 py-2"
+                placeholder="10000"
+              />
+            </div>
+
+            {(freeOnly || minPrice !== '' || maxPrice !== '') && (
+              <button
+                onClick={() => {
+                  setFreeOnly(false);
+                  setMinPrice('');
+                  setMaxPrice('');
+                }}
+                className="text-sm text-primary-600 dark:text-primary-400 font-semibold hover:underline"
+              >
+                {t('marketplace.clearFilters')}
+              </button>
+            )}
+          </motion.div>
+        )}
 
         {/* Category Pills */}
         <div className="flex flex-wrap gap-2 mb-8">
