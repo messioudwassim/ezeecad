@@ -91,6 +91,13 @@ const resources = {
         approve: 'Approuver',
         reject: 'Rejeter',
         delete: 'Supprimer',
+        noDownloads: 'Aucun téléchargement pour le moment',
+        orderDate: "Date d'achat",
+        free: 'Gratuit',
+        amountPaid: 'Montant payé',
+        invoice: 'Facture',
+
+
         stats: 'Statistiques',
         totalModels: 'Total modèles',
         totalDownloads: 'Total téléchargements',
@@ -236,6 +243,13 @@ const resources = {
         approve: 'Approve',
         reject: 'Reject',
         delete: 'Delete',
+        noDownloads: 'No downloads yet',
+        orderDate: 'Purchase date',
+        free: 'Free',
+        amountPaid: 'Amount paid',
+        invoice: 'Invoice',
+
+
         stats: 'Statistics',
         totalModels: 'Total models',
         totalDownloads: 'Total downloads',
@@ -381,6 +395,13 @@ const resources = {
         approve: 'اعتماد',
         reject: 'رفض',
         delete: 'حذف',
+        noDownloads: 'لا توجد تحميلات بعد',
+        orderDate: 'تاريخ الشراء',
+        free: 'مجاني',
+        amountPaid: 'المبلغ المدفوع',
+        invoice: 'الفاتورة',
+
+
         stats: 'إحصائيات',
         totalModels: 'إجمالي النماذج',
         totalDownloads: 'إجمالي التحميلات',

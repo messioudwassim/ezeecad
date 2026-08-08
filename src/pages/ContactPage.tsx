@@ -42,11 +42,29 @@ const COPY = {
     subjectPlaceholder: 'E.g. Question about my order',
     messagePlaceholder: 'Describe your request in a few lines...',
   },
+  ar: {
+    title: 'اتصل بنا',
+    subtitle: 'سؤال، اقتراح، مشكلة في طلب؟ راسلنا.',
+    emailLabel: 'عبر البريد الإلكتروني',
+    addressLabel: 'العنوان',
+    addressValue: '[عنوان الشركة - يُستكمل لاحقاً]',
+    formTitle: 'إرسال رسالة',
+    name: 'الاسم الكامل',
+    email: 'بريدك الإلكتروني',
+    subject: 'الموضوع',
+    message: 'الرسالة',
+    send: 'إرسال الرسالة',
+    note: 'بالنقر على "إرسال"، سيتم فتح تطبيق البريد الإلكتروني الخاص بك مع الرسالة معبأة مسبقاً موجهة إلى فريقنا.',
+    sentTitle: 'شكراً لك!',
+    sentBody: 'تم فتح برنامج البريد الإلكتروني الخاص بك مع الرسالة المعبأة مسبقاً. لم يتبقَّ سوى الإرسال.',
+    subjectPlaceholder: 'مثال: سؤال حول طلبي',
+    messagePlaceholder: 'صف طلبك في بضعة أسطر...',
+  },
 };
 
 export default function ContactPage() {
   const { lang } = useLang();
-  const t = lang === 'en' ? COPY.en : COPY.fr;
+  const t = lang === 'en' ? COPY.en : lang === 'ar' ? COPY.ar : COPY.fr;
 
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
   const [sent, setSent] = useState(false);

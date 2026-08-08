@@ -46,6 +46,21 @@ function AdminRoute({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
+function DesignerRoute({ children }: { children: ReactNode }) {
+  const { user, profile, loading } = useAuth();
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-mesh">
+        <div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+  if (!user || (profile?.role !== 'designer' && profile?.role !== 'admin')) {
+    return <Navigate to="/dashboard" replace />;
+  }
+  return <>{children}</>;
+}
+
 function PublicLayout({ children }: { children: ReactNode }) {
   return (
     <>
@@ -80,8 +95,22 @@ function App() {
           }
         >
           <Route index element={<DashboardHome />} />
-          <Route path="upload" element={<UploadModelPage />} />
-          <Route path="my-models" element={<MyModelsPage />} />
+          <Route
+            path="upload"
+            element={
+              <DesignerRoute>
+                <UploadModelPage />
+              </DesignerRoute>
+            }
+          />
+          <Route
+            path="my-models"
+            element={
+              <DesignerRoute>
+                <MyModelsPage />
+              </DesignerRoute>
+            }
+          />
           <Route path="downloads" element={<MyDownloadsPage />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route
