@@ -60,7 +60,7 @@ export default function MyModelsPage() {
       {models.length === 0 ? (
         <div className="card-3d p-12 text-center">
           <Package className="w-12 h-12 mx-auto text-slate-300 dark:text-slate-700 mb-3" />
-          <p className="text-slate-500 mb-4">No models yet</p>
+          <p className="text-slate-500 mb-4">{t('dashboard.noModels')}</p>
           <Link to="/dashboard/upload" className="btn-3d inline-flex">
             {t('dashboard.uploadModel')}
           </Link>

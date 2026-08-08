@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
@@ -7,6 +8,7 @@ import { supabase } from '@/lib/supabase';
 type Status = 'checking' | 'paid' | 'pending' | 'failed';
 
 export default function PaymentReturnPage() {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const orderId = searchParams.get('order');
   const failed = searchParams.get('failed') === '1';
@@ -67,21 +69,19 @@ export default function PaymentReturnPage() {
         {status === 'checking' && (
           <>
             <Loader2 className="w-14 h-14 mx-auto text-primary-500 mb-4 animate-spin" />
-            <h2 className="font-display text-xl font-bold mb-2">Vérification du paiement…</h2>
-            <p className="text-slate-500 text-sm">Merci de patienter quelques secondes.</p>
+            <h2 className="font-display text-xl font-bold mb-2">{t('payment.checkingTitle')}</h2>
+            <p className="text-slate-500 text-sm">{t('payment.checkingBody')}</p>
           </>
         )}
 
         {status === 'paid' && (
           <>
             <CheckCircle className="w-14 h-14 mx-auto text-success-500 mb-4" />
-            <h2 className="font-display text-xl font-bold mb-2">Paiement confirmé !</h2>
-            <p className="text-slate-500 text-sm mb-6">
-              Ton achat est validé, tu peux télécharger le modèle.
-            </p>
+            <h2 className="font-display text-xl font-bold mb-2">{t('payment.paidTitle')}</h2>
+            <p className="text-slate-500 text-sm mb-6">{t('payment.paidBody')}</p>
             {modelId && (
               <Link to={`/marketplace/${modelId}`} className="btn-3d inline-flex">
-                Aller au modèle
+                {t('payment.goToModel')}
               </Link>
             )}
           </>
@@ -90,14 +90,11 @@ export default function PaymentReturnPage() {
         {status === 'pending' && (
           <>
             <Loader2 className="w-14 h-14 mx-auto text-warning-500 mb-4" />
-            <h2 className="font-display text-xl font-bold mb-2">Paiement en cours de traitement</h2>
-            <p className="text-slate-500 text-sm mb-6">
-              Ça arrive parfois — la confirmation peut prendre un peu plus de temps.
-              Reviens sur la page du modèle dans une minute.
-            </p>
+            <h2 className="font-display text-xl font-bold mb-2">{t('payment.pendingTitle')}</h2>
+            <p className="text-slate-500 text-sm mb-6">{t('payment.pendingBody')}</p>
             {modelId && (
               <Link to={`/marketplace/${modelId}`} className="btn-ghost-3d inline-flex">
-                Retour au modèle
+                {t('payment.backToModel')}
               </Link>
             )}
           </>
@@ -106,12 +103,10 @@ export default function PaymentReturnPage() {
         {status === 'failed' && (
           <>
             <XCircle className="w-14 h-14 mx-auto text-error-500 mb-4" />
-            <h2 className="font-display text-xl font-bold mb-2">Paiement échoué</h2>
-            <p className="text-slate-500 text-sm mb-6">
-              Le paiement n'a pas abouti. Aucun montant n'a été débité si la transaction a été annulée.
-            </p>
+            <h2 className="font-display text-xl font-bold mb-2">{t('payment.failedTitle')}</h2>
+            <p className="text-slate-500 text-sm mb-6">{t('payment.failedBody')}</p>
             <Link to="/marketplace" className="btn-3d inline-flex">
-              Retour au marketplace
+              {t('payment.backToMarketplace')}
             </Link>
           </>
         )}

@@ -92,7 +92,7 @@ export default function DashboardHome() {
           ) : models.length === 0 ? (
             <div className="card-3d p-12 text-center">
               <Package className="w-12 h-12 mx-auto text-slate-300 dark:text-slate-700 mb-3" />
-              <p className="text-slate-500">No models yet</p>
+              <p className="text-slate-500">{t('dashboard.noModels')}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

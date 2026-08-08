@@ -228,7 +228,7 @@ export default function AdminPage() {
           {filtered.length === 0 ? (
             <div className="card-3d p-12 text-center">
               <Package className="w-12 h-12 mx-auto text-slate-300 dark:text-slate-700 mb-3" />
-              <p className="text-slate-500">No models</p>
+              <p className="text-slate-500">{t('dashboard.noModels')}</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -320,8 +320,8 @@ export default function AdminPage() {
                 <div className="min-w-0 flex-1">
                   <p className="font-semibold truncate">{u.full_name || '—'}</p>
                   <p className="text-xs text-slate-500">
-                    {new Date(u.created_at).toLocaleDateString()}
-                    {u.id === currentUser?.id ? ' · (vous)' : ''}
+                    {new Date(u.created_at).toLocaleDateString('fr-DZ')}
+                    {u.id === currentUser?.id ? ` · (${t('dashboard.you')})` : ''}
                   </p>
                 </div>
                 <select

@@ -109,6 +109,10 @@ const resources = {
         role: 'Rôle',
         changeRoleConfirm: 'Changer le rôle de {{name}} en "{{role}}" ?',
         noUsers: 'Aucun utilisateur',
+        you: 'vous',
+        noModels: 'Aucun modèle pour le moment',
+
+
         addCategory: 'Ajouter une catégorie',
         editCategory: 'Modifier la catégorie',
         categoryNameFr: 'Nom (Français)',
@@ -121,6 +125,19 @@ const resources = {
         confirmDeleteCategory: 'Supprimer cette catégorie ? Les modèles associés resteront mais perdront leur catégorie.',
         noCategories: 'Aucune catégorie',
         cannotChangeOwnRole: 'Vous ne pouvez pas changer votre propre rôle ici.',
+      },
+      payment: {
+        checkingTitle: 'Vérification du paiement…',
+        checkingBody: 'Merci de patienter quelques secondes.',
+        paidTitle: 'Paiement confirmé !',
+        paidBody: 'Ton achat est validé, tu peux télécharger le modèle.',
+        goToModel: 'Aller au modèle',
+        pendingTitle: 'Paiement en cours de traitement',
+        pendingBody: "Ça arrive parfois — la confirmation peut prendre un peu plus de temps. Reviens sur la page du modèle dans une minute.",
+        backToModel: 'Retour au modèle',
+        failedTitle: 'Paiement échoué',
+        failedBody: "Le paiement n'a pas abouti. Aucun montant n'a été débité si la transaction a été annulée.",
+        backToMarketplace: 'Retour au marketplace',
       },
       upload: {
         title: 'Publier un nouveau modèle',
@@ -261,6 +278,10 @@ const resources = {
         role: 'Role',
         changeRoleConfirm: 'Change {{name}}\'s role to "{{role}}"?',
         noUsers: 'No users',
+        you: 'you',
+        noModels: 'No models yet',
+
+
         addCategory: 'Add category',
         editCategory: 'Edit category',
         categoryNameFr: 'Name (French)',
@@ -273,6 +294,19 @@ const resources = {
         confirmDeleteCategory: 'Delete this category? Related models will keep existing but lose their category.',
         noCategories: 'No categories',
         cannotChangeOwnRole: 'You cannot change your own role here.',
+      },
+      payment: {
+        checkingTitle: 'Verifying payment…',
+        checkingBody: 'Please wait a few seconds.',
+        paidTitle: 'Payment confirmed!',
+        paidBody: 'Your purchase is validated, you can now download the model.',
+        goToModel: 'Go to model',
+        pendingTitle: 'Payment being processed',
+        pendingBody: "This happens sometimes — confirmation may take a bit longer. Come back to the model page in a minute.",
+        backToModel: 'Back to model',
+        failedTitle: 'Payment failed',
+        failedBody: 'The payment did not go through. No amount was charged if the transaction was cancelled.',
+        backToMarketplace: 'Back to marketplace',
       },
       upload: {
         title: 'Publish a new model',
@@ -413,6 +447,10 @@ const resources = {
         role: 'الدور',
         changeRoleConfirm: 'تغيير دور {{name}} إلى "{{role}}"؟',
         noUsers: 'لا يوجد مستخدمون',
+        you: 'أنت',
+        noModels: 'لا توجد نماذج بعد',
+
+
         addCategory: 'إضافة فئة',
         editCategory: 'تعديل الفئة',
         categoryNameFr: 'الاسم (فرنسي)',
@@ -425,6 +463,19 @@ const resources = {
         confirmDeleteCategory: 'حذف هذه الفئة؟ ستبقى النماذج المرتبطة بها لكن بدون فئة.',
         noCategories: 'لا توجد فئات',
         cannotChangeOwnRole: 'لا يمكنك تغيير دورك الخاص هنا.',
+      },
+      payment: {
+        checkingTitle: 'جارٍ التحقق من الدفع…',
+        checkingBody: 'يرجى الانتظار بضع ثوانٍ.',
+        paidTitle: 'تم تأكيد الدفع!',
+        paidBody: 'تم التحقق من عملية الشراء، يمكنك الآن تحميل النموذج.',
+        goToModel: 'الذهاب إلى النموذج',
+        pendingTitle: 'الدفع قيد المعالجة',
+        pendingBody: 'يحدث هذا أحياناً — قد يستغرق التأكيد وقتاً أطول قليلاً. عد إلى صفحة النموذج بعد دقيقة.',
+        backToModel: 'العودة إلى النموذج',
+        failedTitle: 'فشل الدفع',
+        failedBody: 'لم تكتمل عملية الدفع. لم يتم خصم أي مبلغ إذا تم إلغاء العملية.',
+        backToMarketplace: 'العودة إلى المتجر',
       },
       upload: {
         title: 'نشر نموذج جديد',
